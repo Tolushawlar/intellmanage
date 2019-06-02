@@ -1,0 +1,171 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>IntellManage | {{ project.name }}</title>
+
+    <link rel="stylesheet" href="{% static 'Users/css/materialize.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Users/css/styles.css' %}">
+    <script src="{% static 'Users/js/materialize.min.js' %}"></script>
+</head>
+<body>
+    <div class="container">
+            <a href="{% url 'ProjectList' %}">
+                    <button class="btn waves right" href="{% url 'CreateProject' %}">
+                            <i class="material-icons white-text left"><img style="padding-top:8px; width:20px;" src="{% static 'Users/img/ic_home_white_18dp.png' %}"></i>
+                            Home
+                    </button>
+            </a>
+
+            <a href="{% url 'CreateProject' %}">
+                    <button class="btn waves right" href="{% url 'CreateProject' %}">
+                            <i class="material-icons white-text left"><img style="padding-top:8px; width:20px;" src="{% static 'Users/img/ic_add_circle_outline_white_18dp.png' %}"></i>
+                            New Project
+                    </button>
+            </a>
+
+        <h1>{{ project.name }} Project</h1>
+        <hr>
+        <section class="section section-stats">
+            <div class="row">
+
+                <div class="col s12 m12 l4">
+                    <div class="card-panel">
+                        <h6 class="bold">Total Budget</h6>
+                        <h1 class="bold">${{ project.budget }}</h1>
+                    </div>
+                </div>
+
+                <div class="col s12 m6  l4 ">
+                        <div class="card-panel">
+                            <h6 class="bold"> Budget Left</h6>
+                            {% if project.project_budget_left > 0 %}
+                            	<h1 class="bold green-text">${{ project.project_budget_left }}</h1>
+                            {% elif project.project_budget_left == 0 %}
+                            	<h1 class="bold orange-text">${{ project.project_budget_left }}</h1>
+                            {% else %}
+                            	<h1 class="bold red-text">${{ project.project_budget_left }}</h1>
+                            {% endif %}
+                            
+                        </div>
+                </div>
+
+                <div class="col s12 m6  l4 ">
+                        <div class="card-panel">
+                            <h6 class="bold">Total Transcations</h6>
+                            <h1 class="bold">{{ project.project_transcations }}</h1>
+                        </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section section-expenses">
+            <div class="row">
+                <button class="btn waves right modal-trigger" href="#expenseModal">
+                    <i class="material-icons white-text left"><img style="padding-top:8px; width:20px;" src="{% static 'Users/img/ic_add_circle_outline_white_18dp.png' %}"></i>
+                    Add Expense</button>
+            </div>
+
+            <ul class="z-depth-1">
+                    <li>
+                            <div class="card-panel z-depth-0 expense">
+                                <div class="row">
+    
+                                    <div class="col l6">
+                                       <h5 class="bold">Expense Title</h5>
+                                    </div>
+    
+                                    <div class="col l3">
+                                        <h5 class="bold">Expense Amount</h5>
+                                    </div>
+    
+                                    <div class="col l1">
+                                        <h5 class="bold"> Category</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                {% for expense in expense_list %}
+                    <li>
+                        <div class="card-panel z-depth-0 expense">
+                            <div class="row">
+
+                                <div class="col l6">
+                                    <span class="title">{{ expense.title }}</span>
+                                </div>
+
+                                <div class="col l3">
+                                        <span class="title">${{ expense.amount }}</span>
+                                </div>
+
+                                <div class="col l1">
+                                        <span class="title bold">{{ expense.category.name }}</span>
+                                </div>
+								
+								<div class="col l2">
+		                            <a onclick="deleteExpense(this)" data-id="{{ expense.id }}">
+										<button class="btn-small" style="margin-left:20px;">Delete</button>
+		                            </a>
+		                        </div>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </section>
+    </div>
+
+    <div id="expenseModal" class="modal">
+        <div class="modal-content">
+            <h4>Add Expense</h4>
+
+            <form method="POST">
+                {% csrf_token %}
+                <label for="title">Title</label>
+                <input name='title' type="text" id="title">
+
+                <label for="amount">Amount</label>
+                <input name='amount' type="text" id="amount">
+
+                <select name="category">
+                    {% for cat in category_list %}
+                        <option>{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+
+                <button type="submit" class="btn">Add</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        var elem = document.querySelector('.modal')
+        var instance = M.Modal.init(elem)
+
+        var elem = document.querySelector('select')
+        var instance = M.FormSelect.init(elem)
+
+        function deleteExpense(e){
+        	
+        	let id = e.dataset.id
+        	e.closest('li').remove()
+        	
+        	fetch('', {
+        		method: 'DELETE',
+        		headers: {
+        			'X-CSRFToken': '{{ csrf_token }}'
+        		},
+        		body: JSON.stringify({
+        			'id': id
+        		}),
+        		credentials: 'same-origin',
+        	})
+        }
+    </script>
+    
+</body> 
+</html>

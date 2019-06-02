@@ -1,0 +1,7 @@
+/* project add view */
+.add form ul li{
+    background-color: white;
+    display: inline-block;
+    padding: 5px 10px;
+    margin-right: 5px;
+}

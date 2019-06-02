@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>IntellManage | Home</title>
+    <link rel="stylesheet" href="{% static 'Users/css/materialize.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Users/css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+            <a href="{% url 'CreateProject' %}">
+                <button class="btn waves right" href="{% url 'CreateProject' %}">
+                        <i class="material-icons white-text left"><img style="padding-top:8px; width:20px;" src="{% static 'Users/img/ic_add_circle_outline_white_18dp.png' %}"></i>
+                        New Project
+                </button>
+            </a>
+        <h1>My Projects</h1>
+        <hr>
+    		<div class="row">
+    		 	{% for project in project_list %}
+					<div class="col s12 l3">
+						<div class="card-panel">
+                            <h5>{{ project.name }} Project</h3></h5>
+                            <a href="{% url 'ProjectDetails' project.slug %}" class="btn">View</a>
+						</div>
+					</div>
+				{% empty %}
+					<div class="noproject-wrapper center">
+            <h3 class="grey-text"> Sorry, you don't have any project yet</h3>
+            <a href="#" class="btn-large grey">
+                <i class="material-icons white-text left"><img style="padding-top:6px;" src="{% static 'Users/img/ic_add_circle_outline_white_18dp.png' %}"></i>
+                <span class="bold ">Add Project</span>
+            </a>
+        </div>
+				{% endfor %}
+    		</div>
+    </div>
+    <script src="{% static 'Users/js/materialize.min.js' %}"></script>
+</body> 
+</html>

@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>IntellManage | New Project</title>
+    <link rel="stylesheet" href="{% static 'Users/css/materialize.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Users/css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'Users/css/add.css' %}">
+</head>
+<body>
+    <div class="container add">
+            <a href="{% url 'ProjectList' %}">
+                    <button class="btn waves right" href="{% url 'CreateProject' %}">
+                            <i class="material-icons white-text left"><img style="padding-top:8px; width:20px;" src="{% static 'Users/img/ic_home_white_18dp.png' %}"></i>
+                            Home
+                    </button>
+            </a>
+        <h1>New Project</h1>
+        <hr>
+        <form action="" method="POST">
+            {% csrf_token %}
+            {{ form }}
+            <label for="CategoryInput">Expense Category (Press Enter After Every Category Input)</label>
+            <input type="text" name="category-input" id="categoryinput">
+            <input type="hidden" name="categoryString">
+
+            <ul class="categoriesContainer">
+               
+            </ul>
+            <button class="btn" type="submit">Start Project</button>
+        </form>
+
+       
+    </div>
+    <!--<script src="{% static 'Users/js/scripts.js' %}"></script>-->
+    <script src="{% static 'Users/js/materialize.min.js' %}"></script>
+</body> 
+</html>
